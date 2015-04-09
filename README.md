@@ -1,6 +1,6 @@
 # raspi-incubator
 Incubator using a Raspberry Pi with temperature/humidity sensor(s) and heat control using a light and fan on relays.
-Using the Raspberry Pi as a web server, an incubator can be monitored and controlled through a web interface.  Additionally, a webcam can be used for remote monitoring if desired.
+Using the Raspberry Pi as a web server, an incubator can be monitored and controlled through a web interface.  Additionally, a webcam could be used for remote monitoring if desired.
 
 ## Equipment
 - [8GB micro sd card](https://www.amazon.com/gp/product/B00200K1TS/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1)
@@ -19,16 +19,28 @@ Using the Raspberry Pi as a web server, an incubator can be monitored and contro
 sudo apt-get update
 sudo apt-get upgrade
 ```
-### Apache Web Server and PHP
+### Manual Setup
+Steps to setup the webserver manually.  I'm writing these as I try different things.  I found a great tutorial on using Flask and the raspberry pi [here](http://mattrichardson.com/Raspberry-Pi-Flask/)
+- Install Flask
 ```
-sudo apt-get install apache2 -y
+sudo apt-get install python-pip
+sudo pip install flask
 ```
+- Create a test file hello-flask.py
+```
+from Flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def hello():
+    return "Hello World"
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=80, debug=True)
+```
+- Now run the server
+```sudo python hello-flask.py```
 - Navigate to your ip address from another computer to verify that the server is up and running
-- Now, install php
-```
-sudo apt-get install php5 libapache2-mod-php5 -y
-```
-- Edit 
 
 ### Wiring
 
