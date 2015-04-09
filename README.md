@@ -28,7 +28,7 @@ sudo pip install flask
 ```
 - Create a test file hello-flask.py
 ```
-from Flask import Flask
+from flask import Flask
 app = Flask(__name__)
 
 @app.route("/")
