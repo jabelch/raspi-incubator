@@ -10,22 +10,48 @@ Using the Raspberry Pi as a web server, an incubator can be monitored and contro
 - [Edimax Wi-Fi USB adapter](https://www.amazon.com/gp/product/B003MTTJOY/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1)
 - [Sainsmart 4-channel relay module](https://www.amazon.com/gp/product/B0057OC5O8/ref=oh_aui_detailpage_o00_s00?ie=UTF8&psc=1)
 
-## Setup
+## Initial Setup
 
 - Install the [latest Raspbian Wheezy image](http://www.raspberrypi.org/downloads/) (Kernel version 3.18, Release 2015-02-16 at the time of this writing).
 - Perform whatever your prefered setup within raspi-config (expand filesystem, enable ssh, etc...)
-- Run the following commands:
+- Enable network access by generating a wpa passphrase for your network
+```
+wpa_passphrase <netowork SSID>
+```
+- Copy the output of this to ```/etc/wpa_supplicant/wpa_supplicant.conf``` and add ```id_str="home"```
+- Restart Raspberry pi then run the following commands:
 ```
 sudo apt-get update
 sudo apt-get upgrade
 ```
-### Manual Setup
-Steps to setup the webserver manually.  I'm writing these as I try different things.  I found a great tutorial on using Flask and the raspberry pi [here](http://mattrichardson.com/Raspberry-Pi-Flask/)
-- Install Flask
+- Install Flask and httplib2
 ```
-sudo apt-get install python-pip
+sudo apt-get install python-pip -y
 sudo pip install flask
+sudo pip install httplib2
 ```
+### MySQL Database Setup
+- Install MySQL database and create the database and user
+```
+sudo apt-get install mysql-server python-mysqldb -y
+mysql -u root -p
+mysql> CREATE DATABASE temps;
+mysql> USE temps
+mysql> CREATE USER 'monitor'@'localhost' IDENTIFIED BY 'raspberry';
+mysql> GRANT ALL PRIVILEGES ON temps.* TO 'monitor'@'localhost';
+mysql> FLUSH PRIVILEGES;
+mysql> quit
+```
+- Now, reenter the shell with the new user to create the table.
+```
+mysql -u monitor -p
+mysql> USE temps
+mysql> CREATE TABLE tempdat (tdate DATE, ttime TIME, zone TEXT, temperature NUMERIC, humidity NUMERIC);
+mysql> quit
+```
+### Server Setup
+Steps to setup the webserver manually.  I'm writing these as I try different things.  I found a great tutorial on using Flask and the raspberry pi [here](http://mattrichardson.com/Raspberry-Pi-Flask/) and [here](http://www.keithsterling.com/?p=493)
+
 - Create a test file hello-flask.py
 ```
 from flask import Flask
