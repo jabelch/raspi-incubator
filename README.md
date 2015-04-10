@@ -49,6 +49,10 @@ mysql> USE temps
 mysql> CREATE TABLE tempdat (tdate DATE, ttime TIME, zone TEXT, temperature NUMERIC, humidity NUMERIC);
 mysql> quit
 ```
+
+### Get this repository
+```git clone http://github.com/jabelch/raspi-incubator```
+
 ### Server Setup
 Steps to setup the webserver manually.  I'm writing these as I try different things.  I found a great tutorial on using Flask and the raspberry pi [here](http://mattrichardson.com/Raspberry-Pi-Flask/) and [here](http://www.keithsterling.com/?p=493)
 
