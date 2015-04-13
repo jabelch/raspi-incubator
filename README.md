@@ -23,10 +23,10 @@ wpa_passphrase <netowork SSID>
 ```
 sudo apt-get update
 sudo apt-get upgrade
+sudo apt-get install build-essential python-dev python-pip -y
 ```
 - Install Flask and httplib2
 ```
-sudo apt-get install python-pip -y
 sudo pip install flask
 sudo pip install httplib2
 ```
@@ -50,8 +50,12 @@ mysql> CREATE TABLE tempdat (tdate DATE, ttime TIME, zone TEXT, temperature NUME
 mysql> quit
 ```
 
-### Get this repository
+### REpositories
+#### raspi-incubator
 ```git clone http://github.com/jabelch/raspi-incubator```
+#### DHT11
+Found [this](https://learn.adafruit.com/dht-humidity-sensing-on-raspberry-pi-with-gdocs-logging/overview) tutorial on the DHT11 sensor.
+```git clone https://github.com/adafruit/Adafruit_Python_DHT.git```
 
 ### Server Setup
 Steps to setup the webserver manually.  I'm writing these as I try different things.  I found a great tutorial on using Flask and the raspberry pi [here](http://mattrichardson.com/Raspberry-Pi-Flask/) and [here](http://www.keithsterling.com/?p=493)
