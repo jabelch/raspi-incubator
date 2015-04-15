@@ -57,6 +57,7 @@ def getReading():
 @app.route("/")
 def main():
     reading = getFromDatabase(1)
+
     # Read pin state
     for pin in pins:
         pins[pin]['state'] = not GPIO.input(pin)
@@ -70,12 +71,10 @@ def main():
         'pins' : pins
     }
 
-    return render_template('temps.html', **templateData)
+    return render_template('main.html', **templateData)
 
 @app.route("/<changePin>/<action>")
 def action(changePin, action):
-    reading = getFromDatabase(1)
-
     # Convert pin from URL to integer
     changePin = int(changePin)
     # Get name of device being changed
@@ -94,6 +93,9 @@ def action(changePin, action):
     # Read pin state
     for pin in pins:
         pins[pin]['state'] = not GPIO.input(pin)
+
+    #Grab temp from database
+    reading = getFromDatabase(1)
 
     templateData = {
         'tdate' : reading[0][0],
