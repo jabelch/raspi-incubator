@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <head>
-   <title>Incubator Status</title>
+   <title>Temperature Status</title>
 </head>
 
 <body>
-   <h1>Incubator Status</h1>
+   <h2>Temperature/Humidity Status</h2>
+   <div>DATE : {{ tdate }}</div>
+   <div>TIME : {{ ttime }}</div>
+   <div>ZONE : {{ zone }}</div>
+   <div>TEMP : {{ temperature }} C </div>
+   <div>HUMID : {{ humidity }}%</div>
+   <p>
 
+   <h2>Pin Status</h2>
    {% for pin in pins %}
    <p>The {{ pins[pin].name }}
    {% if pins[pin].state == true %}
