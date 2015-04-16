@@ -47,6 +47,7 @@ mysql> quit
 mysql -u monitor -p
 mysql> USE temps
 mysql> CREATE TABLE tempdat (tdate DATE, ttime TIME, zone TEXT, temperature NUMERIC, humidity NUMERIC);
+mysql> CREATE TABLE `setpoints` (`id` INT(10) NOT NULL, `sp_high` NUMERIC NOT NULL, `sp_low` NUMERIC NOT NULL, UNIQUE(`id), PRIMARY KEY(`id`));
 mysql> quit
 ```
 
