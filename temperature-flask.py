@@ -12,11 +12,22 @@ app = Flask(__name__)
 
 GPIO.setmode(GPIO.BCM)
 
-#Create a dictionary of pins
-pins = {
-    23 : {'name' : 'Lamp', 'state' : GPIO.IN},
-    24 : {'name' : 'Fan', 'state' : GPIO.IN}
-}
+pinsQuery = """
+SELECT `pin`, `name`
+FROM pins
+"""
+
+#Grab pins from db
+db = MySQLdb.connect("localhost", "monitor", "raspberry", "temps")
+curs = db.cursor()
+with db:
+   curs.execute (pinsQuery)
+pins = {}
+for (pin, name) in curs:
+    #Create a dictionary of pins
+    pins[int(pin)] = {'name' : name, 'state' : GPIO.IN}
+curs.close()
+db.close()
 
 # Helper function to change pin state
 def setPin(pinNumber, dir):

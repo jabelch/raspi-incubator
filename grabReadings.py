@@ -23,6 +23,7 @@ while True:
 	humidity, temp = Adafruit_DHT.read(sensor[2], sensor[1])
 
 	if humidity is None or temp is None:
+		time.sleep(1)
 		continue
 
 	temp = '{0:0.1f}'.format(temp)

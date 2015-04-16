@@ -8,15 +8,6 @@ GPIO.setmode(GPIO.BCM)
 def setPin(pinNumber, dir):
     GPIO.setup(pinNumber, dir, pull_up_down=GPIO.PUD_UP)
 
-#High and Low set points (fahrenheit)
-SP_HIGH = 90
-SP_LOW = 80
-LIGHT = 23
-FAN = 24
-
-Heating = 1
-Cooling = 2
-
 tempQuery = """
     SELECT `temperature`, `humidity`
     FROM tempdat
@@ -28,6 +19,22 @@ setpointQuery = """
     FROM setpoints
     WHERE `id` = 1
 """
+pinsQuery = """
+SELECT `pin`, `name`
+FROM pins
+WHERE `name` = 'Lamp'
+"""
+
+#Grab pin from db
+db = MySQLdb.connect("localhost", "monitor", "raspberry", "temps")
+curs = db.cursor()
+with db:
+   curs.execute (pinsQuery)
+LIGHT = -1
+for (pin, name) in curs:
+    LIGHT = int(pin)
+curs.close()
+db.close()
 
 def getData():
     #Grab the latest reading from database
@@ -52,7 +59,6 @@ def getData():
     return results, sp
 
 def autoTemp():
-    currentState = Heating
     while(1):
         temp, sp = getData()
         tempC = float(temp[0])
@@ -61,16 +67,12 @@ def autoTemp():
         sp_high = float(sp[0])
         sp_low = float(sp[1])
 
-
-        #print "TempC : " + str(tempC) + " TempF : " + str(tempF) + " Humid : " + str(humid)
-        if (tempF > sp_high):
+        if (tempC > sp_high):
             #Turn Off Heater
             setPin(LIGHT, GPIO.IN)
-            currentState = Cooling
-        elif (tempF < sp_low):
+        elif (tempC < sp_low):
             #Turn On Heater
             setPin(LIGHT, GPIO.OUT)
-            currentState = Heating
 
         time.sleep(5)
 
