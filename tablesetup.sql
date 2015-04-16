@@ -16,5 +16,19 @@ CREATE TABLE IF NOT EXISTS `tempdat` (
     `humidity` NUMERIC
 );
 
+CREATE TABLE IF NOT EXISTS `pins` (
+    `id` int(3) NOT NULL,
+    `pin` int(2) NOT NULL,
+    `name` varchar(64),
+    UNIQUE(`pin`),
+    PRIMARY KEY(`id`)
+);
+
 INSERT INTO `setpoints` (`id`, `sp_high`, `sp_low`)
 VALUES(1, 102, 97);
+
+INSERT INTO `pins` (`id`, `pin`, `name`)
+VALUES(1, 23, "Lamp"), 
+(2, 24, "Fan"), 
+(3, 25, "IN3"), 
+(4, 8, "IN4");
