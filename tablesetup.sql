@@ -1,4 +1,4 @@
-CREATE DB temps
+CREATE DATABASE temps;
 USE temps
 
 CREATE TABLE IF NOT EXISTS `setpoints` (
