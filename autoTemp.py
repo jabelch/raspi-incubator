@@ -1,39 +1,78 @@
 import MySQLdb
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+# Helper function to change pin state
+def setPin(pinNumber, dir):
+    GPIO.setup(pinNumber, dir, pull_up_down=GPIO.PUD_UP)
 
 #High and Low set points (fahrenheit)
-SP_HIGH = 100
-SP_LOW = 95
+SP_HIGH = 90
+SP_LOW = 80
+LIGHT = 23
+FAN = 24
 
-class Incubator:
-    Heating = 1
-    Cooling = 2
-    sp_high = 100
-    sp_low = 95
+Heating = 1
+Cooling = 2
 
-selectQuery = """
+tempQuery = """
     SELECT `temperature`, `humidity`
     FROM tempdat
     ORDER BY `tdate` DESC, `ttime` DESC
     LIMIT 1
 """
+setpointQuery = """
+    SELECT `sp_high`, `sp_low`
+    FROM setpoints
+    WHERE `id` = 1
+"""
 
-def getTemp():
+def getData():
     #Grab the latest reading from database
     db = MySQLdb.connect("localhost", "monitor", "raspberry", "temps")
     curs=db.cursor()
 
     with db:
-        curs.execute (selectQuery)
-    results = []
-    for (temperature, humidity) in curs:
-        results.append([temperature, humidity])
+        curs.execute (tempQuery)
 
-    curse.close()
+    for (temperature, humidity) in curs:
+        results = (temperature, humidity)
+
+    with db:
+        curs.execute (setpointQuery)
+    sp = []
+    for (sp_high, sp_low) in curs:
+        sp = (sp_high, sp_low)
+
+    curs.close()
     db.close()
 
-    return results
+    return results, sp
 
 def autoTemp():
-    while(1)
-        reading = getTemp()
-        
+    currentState = Heating
+    while(1):
+        temp, sp = getData()
+        tempC = float(temp[0])
+        tempF = 9.0/5.0 * tempC + 32.0
+        humid = float(temp[1])
+        sp_high = float(sp[0])
+        sp_low = float(sp[1])
+
+
+        #print "TempC : " + str(tempC) + " TempF : " + str(tempF) + " Humid : " + str(humid)
+        if (tempF > sp_high):
+            #Turn Off Heater
+            setPin(LIGHT, GPIO.IN)
+            currentState = Cooling
+        elif (tempF < sp_low):
+            #Turn On Heater
+            setPin(LIGHT, GPIO.OUT)
+            currentState = Heating
+
+        time.sleep(5)
+
+if __name__ == "__main__":
+    autoTemp()

@@ -14,9 +14,8 @@ curs = db.cursor()
 # zone, pin, sensortype
 sensor = ['dht01', 2, Adafruit_DHT.DHT11]
 
-# How long to wait (in seconds) between measurements and storing
-FREQ_MEASURE = 1
-FREQ_STORE = 60
+# How long to wait (in seconds) between measurements
+FREQ_MEASURE = 10
 
 print 'Logging temp/humidity to MySQL database every {0} seconds.'.format(FREQ_MEASURE)
 while True:
@@ -30,14 +29,19 @@ while True:
 	humidity = '{0:0.1f}'.format(humidity)
 	#print str(temp) + " " + str(humidity) + "\n"
 
-	query = """
+	insertQuery = """
 		INSERT INTO tempdat
 		(`tdate`, `ttime`, `zone`, `temperature`, `humidity`)
 		VALUES
 		(CURRENT_DATE(), NOW(), 'th', %s, %s)
 		"""
+        deleteQuery = """
+                DELETE FROM tempdat
+                WHERE `tdate` < DATE_SUB(NOW(), INTERVAL 2 DAY)
+                """
 	with db:
-		curs.execute(query, (temp, humidity))
+		curs.execute(insertQuery, (temp, humidity))
+                curs.execute(deleteQuery)
 
 	# Wait specified time between readings
 	time.sleep(FREQ_MEASURE)
