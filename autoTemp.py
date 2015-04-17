@@ -22,7 +22,6 @@ setpointQuery = """
 pinsQuery = """
 SELECT `id`, `pin`, `name`
 FROM pins
-WHERE `id` = 1 or `id` = 3 or `id` = 4
 """
 
 #Grab pin from db
@@ -31,11 +30,14 @@ curs = db.cursor()
 with db:
    curs.execute (pinsQuery)
 LIGHT = -1		#Relay1
+FAN_CIRCULATE = -1	#Relay2
 FAN_EMERGENCY = -1	#Relay3
 FAN_HUMID = -1		#Relay4
 for (id, pin, name) in curs:
     if (id == 1):
 	LIGHT = int(pin)
+    if (id == 2):
+        FAN_CIRCULATE = int(pin)
     if (id == 3):
 	FAN_EMERGENCY = int(pin)
     if (id == 4):
@@ -96,8 +98,11 @@ def autoTemp():
             #Turn OFF FAN_HUMID
             setPin(FAN_HUMID, GPIO.IN)
         elif (humid < sp_low_h):
-            #Turn OFF FAN_HUMID
+            #Turn ON FAN_HUMID
             setPin(FAN_HUMID, GPIO.OUT)
+
+        #Always have the circulation fan on
+	setPin(FAN_CIRCULATE, GPIO.OUT)
 
         time.sleep(5)
 
