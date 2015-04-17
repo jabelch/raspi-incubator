@@ -34,8 +34,8 @@ def setPin(pinNumber, dir):
     GPIO.setup(pinNumber, dir, pull_up_down=GPIO.PUD_UP)
 
 #Set pins as output and low
-for pin in pins:
-    setPin(pin, GPIO.IN)
+#for pin in pins:
+#    setPin(pin, GPIO.IN)
 
 #Get the top %s temperatures from tempdat 
 selectQuery = """
@@ -60,11 +60,6 @@ def getFromDatabase(numReadings):
 
     return results
 
-def getReading():
-    # Attempt to get sensor reading.
-    humidity, temp = Adafruit_DHT.read(Adafruit_DHT.DHT11, pin)
-    return (humidity, temp)
-
 @app.route("/")
 def main():
     reading = getFromDatabase(1)
@@ -77,7 +72,8 @@ def main():
         'tdate' : reading[0][0],
         'ttime' : reading[0][1],
         'zone' : reading[0][2],
-        'temperature' : reading[0][3],
+        'tempC' : float(reading[0][3]),
+        'tempF' : (9.0/5.0) * float(reading[0][3]) + 32,
         'humidity' : reading[0][4],
         'pins' : pins
     }
@@ -112,7 +108,8 @@ def action(changePin, action):
         'tdate' : reading[0][0],
         'ttime' : reading[0][1],
         'zone' : reading[0][2],
-        'temperature' : reading[0][3],
+        'tempC' : float(reading[0][3]),
+        'tempF' : (9.0/5.0) * float(reading[0][3]) + 32,
         'humidity' : reading[0][4],
         'message' : message,
         'pins' : pins
