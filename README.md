@@ -1,3 +1,12 @@
+## Quick MySQL Commands
+```
+mysql -u monitor -p
+mysql> USE temps
+mysql> SELECT * FROM setpoints;
+
+mysql> UPDATE setupoints SET <columnName>=<value>;
+```
+
 # raspi-incubator
 Incubator using a Raspberry Pi with temperature/humidity sensor(s) and heat control using a light and fan on relays.
 Using the Raspberry Pi as a web server, an incubator can be monitored and controlled through a web interface.  Additionally, a webcam could be used for remote monitoring if desired.
