@@ -4,7 +4,7 @@ mysql -u monitor -p
 mysql> USE temps
 mysql> SELECT * FROM setpoints;
 
-mysql> UPDATE setupoints SET <columnName>=<value>;
+mysql> UPDATE setpoints SET <columnName>=<value>;
 ```
 
 # raspi-incubator
