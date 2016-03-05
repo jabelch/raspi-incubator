@@ -61,7 +61,7 @@ mysql> INSERT INTO `setpoints` (`id`, `sp_high`, `sp_low`) VALUES(1,102,97);
 mysql> quit
 ```
 
-### REpositories
+### Repositories
 #### raspi-incubator
 ```git clone http://github.com/jabelch/raspi-incubator```
 #### DHT11
